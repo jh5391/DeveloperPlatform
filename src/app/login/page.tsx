@@ -31,6 +31,7 @@ export default function LoginPage() {
         router.refresh();
       }
     } catch (error) {
+      console.error("로그인 중 오류:", error);
       setError("로그인 중 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
     } finally {
       setLoading(false);

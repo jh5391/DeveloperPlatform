@@ -1,22 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { NextAuthProvider } from "@/components/providers/NextAuthProvider";
 import { ThemeRegistry } from "@/components/providers/ThemeRegistry";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Next.js 풀스택 애플리케이션",
-  description: "TypeScript 기반의 Next.js 풀스택 프로젝트",
+  title: "관리자 대시보드",
+  description: "관리자 대시보드 - 권한 관리 시스템",
 };
 
 export default function RootLayout({
@@ -26,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={inter.className}>
         <ThemeRegistry>
           <NextAuthProvider>
             {children}

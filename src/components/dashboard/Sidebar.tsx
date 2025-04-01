@@ -3,8 +3,6 @@ import {
   Dashboard as DashboardIcon,
   Person as PersonIcon,
   Settings as SettingsIcon,
-  Analytics as AnalyticsIcon,
-  Notifications as NotificationsIcon,
   Security as SecurityIcon,
 } from '@mui/icons-material';
 import { useRouter, usePathname } from 'next/navigation';
@@ -13,8 +11,6 @@ import { PermissionGuard } from '@/context/AuthContext';
 const menuItems = [
   { text: '대시보드', icon: <DashboardIcon />, path: '/dashboard' },
   { text: '프로필', icon: <PersonIcon />, path: '/dashboard/profile' },
-  { text: '분석', icon: <AnalyticsIcon />, path: '/dashboard/analytics' },
-  { text: '알림', icon: <NotificationsIcon />, path: '/dashboard/notifications' },
   { text: '설정', icon: <SettingsIcon />, path: '/dashboard/settings' },
 ];
 

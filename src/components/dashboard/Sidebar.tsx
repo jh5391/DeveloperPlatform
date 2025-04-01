@@ -1,4 +1,4 @@
-import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Drawer } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
   Person as PersonIcon,
@@ -19,7 +19,11 @@ const adminMenuItems = [
   { text: '권한 관리', icon: <SecurityIcon />, path: '/dashboard/permissions', permission: 'page:permissions' },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  open: boolean;
+}
+
+export default function Sidebar({ open }: SidebarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const { can } = useAuth();
@@ -29,65 +33,74 @@ export default function Sidebar() {
     (item) => can('access', item.permission)
   );
 
+  const drawer = (
+    <List>
+      {menuItems.map((item) => (
+        <ListItem key={item.text} disablePadding>
+          <ListItemButton
+            selected={pathname === item.path}
+            onClick={() => router.push(item.path)}
+            sx={{
+              '&.Mui-selected': {
+                bgcolor: 'primary.light',
+                color: 'primary.contrastText',
+                '&:hover': {
+                  bgcolor: 'primary.light',
+                },
+              },
+            }}
+          >
+            <ListItemIcon sx={{ color: pathname === item.path ? 'inherit' : undefined }}>
+              {item.icon}
+            </ListItemIcon>
+            <ListItemText primary={item.text} />
+          </ListItemButton>
+        </ListItem>
+      ))}
+      
+      {/* 관리자 전용 메뉴 - 권한이 있는 항목만 표시 */}
+      {filteredAdminMenuItems.length > 0 && filteredAdminMenuItems.map((item) => (
+        <ListItem key={item.text} disablePadding>
+          <ListItemButton
+            selected={pathname === item.path}
+            onClick={() => router.push(item.path)}
+            sx={{
+              '&.Mui-selected': {
+                bgcolor: 'primary.light',
+                color: 'primary.contrastText',
+                '&:hover': {
+                  bgcolor: 'primary.light',
+                },
+              },
+            }}
+          >
+            <ListItemIcon sx={{ color: pathname === item.path ? 'inherit' : undefined }}>
+              {item.icon}
+            </ListItemIcon>
+            <ListItemText primary={item.text} />
+          </ListItemButton>
+        </ListItem>
+      ))}
+    </List>
+  );
+
   return (
-    <Box
+    <Drawer
+      variant="persistent"
+      anchor="left"
+      open={open}
       sx={{
         width: 240,
         flexShrink: 0,
-        borderRight: '1px solid',
-        borderColor: 'divider',
-        height: '100vh',
-        bgcolor: 'background.paper',
+        '& .MuiDrawer-paper': {
+          width: 240,
+          boxSizing: 'border-box',
+          borderRight: '1px solid',
+          borderColor: 'divider',
+        },
       }}
     >
-      <List>
-        {menuItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton
-              selected={pathname === item.path}
-              onClick={() => router.push(item.path)}
-              sx={{
-                '&.Mui-selected': {
-                  bgcolor: 'primary.light',
-                  color: 'primary.contrastText',
-                  '&:hover': {
-                    bgcolor: 'primary.light',
-                  },
-                },
-              }}
-            >
-              <ListItemIcon sx={{ color: pathname === item.path ? 'inherit' : undefined }}>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-        
-        {/* 관리자 전용 메뉴 - 권한이 있는 항목만 표시 */}
-        {filteredAdminMenuItems.length > 0 && filteredAdminMenuItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton
-              selected={pathname === item.path}
-              onClick={() => router.push(item.path)}
-              sx={{
-                '&.Mui-selected': {
-                  bgcolor: 'primary.light',
-                  color: 'primary.contrastText',
-                  '&:hover': {
-                    bgcolor: 'primary.light',
-                  },
-                },
-              }}
-            >
-              <ListItemIcon sx={{ color: pathname === item.path ? 'inherit' : undefined }}>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
+      {drawer}
+    </Drawer>
   );
 } 

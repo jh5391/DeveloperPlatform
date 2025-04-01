@@ -11,12 +11,8 @@ export default function Home() {
     <div className={styles.page}>
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Next.js 풀스택 애플리케이션
+          내부 개발자 플랫폼
         </h1>
-        
-        <p className={styles.description}>
-          TypeScript 기반의 Next.js 프로젝트입니다
-        </p>
 
         <div className={styles.grid}>
           {session ? (
@@ -41,27 +37,10 @@ export default function Home() {
               샘플 API 엔드포인트를 확인해보세요
             </p>
           </Link>
-          
-          <a
-            href="https://nextjs.org/docs"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>문서 &rarr;</h2>
-            <p>Next.js에 대한 자세한 정보를 확인하세요</p>
-          </a>
         </div>
       </main>
 
       <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Next.js로 만들어진 풀스택 애플리케이션
-        </a>
       </footer>
     </div>
   );

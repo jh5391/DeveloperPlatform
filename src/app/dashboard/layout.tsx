@@ -44,13 +44,21 @@ export default function DashboardLayout({
           position="fixed"
           sx={{
             zIndex: (theme) => theme.zIndex.drawer + 1,
-            width: `calc(100% - ${sidebarOpen ? 240 : 0}px)`,
-            ml: sidebarOpen ? "240px" : 0,
+            width: "100%",
             transition: (theme) =>
               theme.transitions.create(["margin", "width"], {
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.leavingScreen,
               }),
+            ...(sidebarOpen && {
+              width: `calc(100% - 240px)`,
+              marginLeft: "240px",
+              transition: (theme) =>
+                theme.transitions.create(["margin", "width"], {
+                  easing: theme.transitions.easing.easeOut,
+                  duration: theme.transitions.duration.enteringScreen,
+                }),
+            }),
           }}
         >
           <Toolbar>
@@ -67,19 +75,27 @@ export default function DashboardLayout({
             </Typography>
           </Toolbar>
         </AppBar>
-        <Sidebar />
+        <Sidebar open={sidebarOpen} />
         <Box
           component="main"
           sx={{
             flexGrow: 1,
             p: 3,
-            width: `calc(100% - ${sidebarOpen ? 240 : 0}px)`,
-            ml: sidebarOpen ? "240px" : 0,
+            width: "100%",
             transition: (theme) =>
               theme.transitions.create(["margin", "width"], {
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.leavingScreen,
               }),
+            ...(sidebarOpen && {
+              marginLeft: "240px",
+              width: `calc(100% - 240px)`,
+              transition: (theme) =>
+                theme.transitions.create(["margin", "width"], {
+                  easing: theme.transitions.easing.easeOut,
+                  duration: theme.transitions.duration.enteringScreen,
+                }),
+            }),
           }}
         >
           <Toolbar />

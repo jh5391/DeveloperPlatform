@@ -1,11 +1,11 @@
 "use client";
 
-import { Box, AppBar, Toolbar, Typography, IconButton } from "@mui/material";
-import { Menu as MenuIcon } from "@mui/icons-material";
+import { Box, AppBar, Toolbar, Typography, IconButton, Button } from "@mui/material";
+import { Menu as MenuIcon, Logout as LogoutIcon } from "@mui/icons-material";
 import Sidebar from "@/components/dashboard/Sidebar";
 import { useState } from "react";
 import { AuthProvider } from "@/context/AuthContext";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -23,6 +23,11 @@ export default function DashboardLayout({
       router.push("/login");
     }
   }, [status, router]);
+
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+    router.push("/login");
+  };
 
   if (status === "loading") {
     return (
@@ -61,18 +66,28 @@ export default function DashboardLayout({
             }),
           }}
         >
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              edge="start"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              sx={{ mr: 2 }}
+          <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <IconButton
+                color="inherit"
+                edge="start"
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                sx={{ mr: 2 }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" noWrap component="div">
+                관리자 대시보드
+              </Typography>
+            </Box>
+            
+            <Button 
+              color="inherit" 
+              onClick={handleLogout}
+              startIcon={<LogoutIcon />}
             >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              관리자 대시보드
-            </Typography>
+              로그아웃
+            </Button>
           </Toolbar>
         </AppBar>
         <Sidebar open={sidebarOpen} />

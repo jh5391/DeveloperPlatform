@@ -7,8 +7,8 @@ import { ThemeRegistry } from "@/components/providers/ThemeRegistry";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "관리자 대시보드",
-  description: "관리자 대시보드 - 권한 관리 시스템",
+  title: "내부 개발자 플랫폼",
+  description: "개발자 대시보드",
 };
 
 export default function RootLayout({

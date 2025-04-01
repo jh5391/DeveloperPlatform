@@ -1,6 +1,28 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+// NextAuth 타입 확장
+declare module "next-auth" {
+  interface User {
+    role?: string;
+  }
+  interface Session {
+    user: {
+      id: string;
+      role?: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    }
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    role?: string;
+  }
+}
+
 // 사용자 데이터베이스를 시뮬레이션합니다 (실제 환경에서는 DB를 사용해야 합니다)
 const users = [
   {
@@ -8,6 +30,7 @@ const users = [
     name: "사용자",
     email: "user@example.com",
     password: "password123", // 실제로는 해시된 비밀번호를 사용해야 합니다
+    role: "admin", // 관리자 역할 추가
   },
 ];
 
@@ -36,6 +59,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           name: user.name,
           email: user.email,
+          role: user.role, // 역할 정보 추가
         };
       }
     })
@@ -53,12 +77,14 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.role = user.role; // JWT 토큰에 역할 정보 추가
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id;
+        session.user.role = token.role as string; // 세션에 역할 정보 추가
       }
       return session;
     },

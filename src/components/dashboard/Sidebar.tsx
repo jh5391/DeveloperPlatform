@@ -1,4 +1,4 @@
-import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Drawer } from '@mui/material';
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, Drawer } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
   Person as PersonIcon,
@@ -16,7 +16,12 @@ const menuItems = [
 
 // 관리자 전용 메뉴 항목
 const adminMenuItems = [
-  { text: '권한 관리', icon: <SecurityIcon />, path: '/dashboard/permissions', permission: 'page:permissions' },
+  { 
+    text: '권한 관리', 
+    icon: <SecurityIcon />, 
+    path: '/dashboard/permissions', 
+    resource: 'page:permissions'
+  },
 ];
 
 interface SidebarProps {
@@ -30,7 +35,7 @@ export default function Sidebar({ open }: SidebarProps) {
 
   // 사용자의 권한에 따라 관리자 메뉴를 필터링합니다
   const filteredAdminMenuItems = adminMenuItems.filter(
-    (item) => can('access', item.permission)
+    (item) => can('access', item.resource)
   );
 
   const drawer = (

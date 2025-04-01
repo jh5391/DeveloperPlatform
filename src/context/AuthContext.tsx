@@ -66,6 +66,10 @@ const mockRoles: Role[] = [
       {
         action: "delete",
         resource: { type: "data", id: "*" }
+      },
+      {
+        action: "access",
+        resource: { type: "page", id: "*" }
       }
     ]
   }
@@ -103,7 +107,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (status === "authenticated" && session?.user) {
       // 실제 애플리케이션에서는 API에서 사용자 정보, 역할, 그룹 등을 가져옵니다.
       // 여기서는 간단한 모의 데이터를 사용합니다.
-      const isAdmin = session.user.email?.includes("admin");
+      const isAdmin = session.user.role === "admin";
       
       const authUser: AuthUser = {
         id: session.user.id || "unknown",

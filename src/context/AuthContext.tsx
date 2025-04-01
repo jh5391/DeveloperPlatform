@@ -15,6 +15,7 @@ interface AuthContextType {
   
   // 권한 관리 메서드
   checkPermission: (action: ActionType | string, resource: ResourceType | string, context?: Record<string, unknown>) => AuthorizationResult;
+  can: (action: ActionType | string, resource: ResourceType | string, context?: Record<string, unknown>) => boolean;
   assignRole: (role: Role) => void;
   updateAttributes: (attributes: Record<string, unknown>) => void;
   getRoles: () => Role[];
@@ -27,6 +28,7 @@ const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   isLoading: true,
   checkPermission: () => ({ allowed: false, reason: "Context not initialized" }),
+  can: () => false,
   assignRole: () => {},
   updateAttributes: () => {},
   getRoles: () => [],
@@ -167,6 +169,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     isAuthenticated: !!user,
     isLoading: status === "loading",
     checkPermission,
+    can: (action: ActionType | string, resource: ResourceType | string, context: Record<string, unknown> = {}) =>
+      checkPermission(action, resource, context).allowed,
     assignRole,
     updateAttributes,
     getRoles,

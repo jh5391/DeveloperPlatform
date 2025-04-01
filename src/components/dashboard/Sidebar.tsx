@@ -6,7 +6,7 @@ import {
   Security as SecurityIcon,
 } from '@mui/icons-material';
 import { useRouter, usePathname } from 'next/navigation';
-import { PermissionGuard } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 
 const menuItems = [
   { text: '대시보드', icon: <DashboardIcon />, path: '/dashboard' },
@@ -16,12 +16,18 @@ const menuItems = [
 
 // 관리자 전용 메뉴 항목
 const adminMenuItems = [
-  { text: '권한 관리', icon: <SecurityIcon />, path: '/dashboard/permissions' },
+  { text: '권한 관리', icon: <SecurityIcon />, path: '/dashboard/permissions', permission: 'page:permissions' },
 ];
 
 export default function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
+  const { can } = useAuth();
+
+  // 사용자의 권한에 따라 관리자 메뉴를 필터링합니다
+  const filteredAdminMenuItems = adminMenuItems.filter(
+    (item) => can('access', item.permission)
+  );
 
   return (
     <Box
@@ -58,31 +64,29 @@ export default function Sidebar() {
           </ListItem>
         ))}
         
-        {/* 관리자 전용 메뉴 */}
-        <PermissionGuard action="access" resource="page:permissions">
-          {adminMenuItems.map((item) => (
-            <ListItem key={item.text} disablePadding>
-              <ListItemButton
-                selected={pathname === item.path}
-                onClick={() => router.push(item.path)}
-                sx={{
-                  '&.Mui-selected': {
+        {/* 관리자 전용 메뉴 - 권한이 있는 항목만 표시 */}
+        {filteredAdminMenuItems.length > 0 && filteredAdminMenuItems.map((item) => (
+          <ListItem key={item.text} disablePadding>
+            <ListItemButton
+              selected={pathname === item.path}
+              onClick={() => router.push(item.path)}
+              sx={{
+                '&.Mui-selected': {
+                  bgcolor: 'primary.light',
+                  color: 'primary.contrastText',
+                  '&:hover': {
                     bgcolor: 'primary.light',
-                    color: 'primary.contrastText',
-                    '&:hover': {
-                      bgcolor: 'primary.light',
-                    },
                   },
-                }}
-              >
-                <ListItemIcon sx={{ color: pathname === item.path ? 'inherit' : undefined }}>
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </PermissionGuard>
+                },
+              }}
+            >
+              <ListItemIcon sx={{ color: pathname === item.path ? 'inherit' : undefined }}>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
       </List>
     </Box>
   );
